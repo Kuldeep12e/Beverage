@@ -1,22 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Navbar } from '../Component/Navbar';
 import './page.css';
 import { CiSearch } from 'react-icons/ci';
 import { Beer } from '../Component/Beer';
+import { BeerDiv } from '../Component/BeerDiv';
+import { Loader } from '../Component/Loader';
+import Noproduct from '../Component/Noproduct';
 
 export const Products = () => {
-  return (
-    <div className='search-product-section'>
-      <Navbar />
-      <div className='search-product'>
-        <div className='search-product-page'>
-          <input type='text' placeholder='search here' />
-          <div className='search-icon'>
-            <CiSearch />
-          </div>
+  const[loading , setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [data, setData] = useState([]);
+
+  const handleSearchChange = (e) => {
+    console.log(e.target.value);
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearch = async () => {
+    if (searchQuery.trim() === '') return;
+
+  try {
+    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${searchQuery}`);
+    const result = await response.json();
+    console.log("result" , result);
+    setData(result.drinks);
+    console.log("data" , data );
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching search results:', error);
+    setData([]); 
+    setLoading(false);
+  }
+};
+
+
+
+return (
+  <div className='search-product-section'>
+    <Navbar />
+    <div className='search-product'>
+      <div className='search-product-page'>
+        <input
+          type='text'
+          placeholder='Search here'
+          value={searchQuery}
+          onChange={handleSearchChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSearch();
+          }}
+        />
+        <div className='search-icon' onClick={handleSearch}>
+          <CiSearch />
         </div>
       </div>
-      <Beer />
     </div>
-  );
+    {loading ? (
+      <Beer/>
+    ) : data && data.length > 0  ? (
+      <div className='products'>
+        {data.map((drink) => (
+          <BeerDiv key={drink.idDrink} name={drink.strDrink} image={drink.strDrinkThumb} />
+        ))}
+      </div>
+    ) : (
+     < Noproduct/>
+    )}
+  </div>
+);
 };
