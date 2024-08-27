@@ -6,6 +6,7 @@ import { Beer } from '../Component/Beer';
 import { BeerDiv } from '../Component/BeerDiv';
 import { Loader } from '../Component/Loader';
 import Noproduct from '../Component/Noproduct';
+import Footer from '../Component/Footer';
 
 export const Products = () => {
   const[loading , setLoading] = useState(true);
@@ -34,6 +35,19 @@ export const Products = () => {
   }
 };
 
+const handleClick = async (id) => {
+  try {
+    const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const detail = await res.json();
+    console.log(detail);
+    return detail.drinks[0]; 
+  } catch (error) {
+    console.error('Error fetching details:', error);
+    return null; 
+  }
+};
+
+
 
 
 return (
@@ -60,12 +74,13 @@ return (
     ) : data && data.length > 0  ? (
       <div className='products'>
         {data.map((drink) => (
-          <BeerDiv key={drink.idDrink} name={drink.strDrink} image={drink.strDrinkThumb} />
+          <BeerDiv key={drink.idDrink} name={drink.strDrink} image={drink.strDrinkThumb} handleClick={handleClick} />
         ))}
       </div>
     ) : (
      < Noproduct/>
     )}
+   
   </div>
 );
 };

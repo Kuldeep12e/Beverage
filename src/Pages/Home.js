@@ -2,10 +2,12 @@ import React from 'react'
 import { Navbar } from '../Component/Navbar'
 import './page.css'
 import { Beer } from '../Component/Beer'
+import Footer from '../Component/Footer'
 
 export const Home = () => {
   return (
     <div className='home'>
+   
         <Navbar/>
         <div className='img-homepage'>
           <img src='bottle-caps-4890369.jpg' ></img>
@@ -17,6 +19,9 @@ export const Home = () => {
           </p>
         </div>
         <Beer/>
+     
+       
+        
     </div>
   )
 }

@@ -6,13 +6,13 @@ import { Loader } from './Loader';
 export const Beer = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [ result , setResult] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic');
         const result = await response.json();
-        console.log(result);
         setData(result.drinks);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -23,9 +23,21 @@ export const Beer = () => {
     fetchData();
   }, []);
 
-  const handleClick = (id , name) => {
-    
-  };
+  
+  
+const handleClick = async (id) => {
+  try {
+    const res = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
+    const detail = await res.json();
+    console.log(detail);
+    return detail.drinks[0]; 
+  } catch (error) {
+    console.error('Error fetching details:', error);
+    return null; 
+  }
+};
+
+ 
 
   return (
     <div className='product-section'>
@@ -41,6 +53,7 @@ export const Beer = () => {
               name={drink.strDrink}
               image={drink.strDrinkThumb}
               handleClick={handleClick}
+              result = {result}
             />
           ))}
         </div>

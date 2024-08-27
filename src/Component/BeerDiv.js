@@ -1,16 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './component.css';
-import { NavLink } from 'react-router-dom';
 
 export const BeerDiv = ({ name, image, handleClick, id }) => {
+  const navigate = useNavigate();
+
+  const handleDetailsClick = async () => {
+    const result = await handleClick(id);
+    navigate('/detail', { state: { result } });
+  };
+
   return (
     <div className='product'>
       <img src={image} alt={name} />
       <p>{name}</p>
       <p>Rs 2000</p>
-      <NavLink to = '/detail'>
-      <button onClick={() => handleClick(id , name)}>Details</button> 
-      </NavLink>
+      <button onClick={handleDetailsClick}>Details</button>
     </div>
   );
 };

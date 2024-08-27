@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navbar } from '../Component/Navbar'
 import './page.css'
+import Footer from '../Component/Footer'
 
 export const About = () => {
     return (
@@ -24,6 +25,7 @@ export const About = () => {
                 </div>
 
             </div>
+            <Footer/>
         </div>
     )
 }
